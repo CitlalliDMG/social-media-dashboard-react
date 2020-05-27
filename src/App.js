@@ -1,25 +1,43 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import "./css/global.css";
+import Header from "./components/header";
+import Switch from "./components/switch";
+import TopCardList from "./components/top-card-list";
+import OverviewCardList from "./components/overview-card-list";
+import Footer from "./components/footer";
 
 function App() {
+  const [mode, setMode] = useState(false);
+  const [checked, setChecked] = useState(false);
+
+  const mainClass = mode ? "dark-mode" : "light-mode";
+
+  function changeMedia(mq) {
+    setMode(mq.matches);
+    setChecked(mq.matches);
+  }
+
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-color-scheme: dark)");
+    mq.addListener(changeMedia);
+    setMode(mq.matches);
+    setChecked(mq.matches);
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <main className={mainClass}>
+      <Header>
+        <Switch
+          mode={mainClass}
+          setMode={setMode}
+          checked={checked}
+          setChecked={setChecked}
+        />
+      </Header>
+      <TopCardList />
+      <OverviewCardList />
+      <Footer />
+    </main>
   );
 }
 
